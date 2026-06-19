@@ -1,86 +1,5 @@
 [
   {
-    "name": "Inventory Sync",
-    "description": "Keep stock levels accurate across all channels in real time. Never oversell or miss a restock alert.",
-    "category": "Automation",
-    "icon": "📦",
-    "repo": "jungeltelegrafen/inventory-sync",
-    "url": "",
-    "status": "live"
-  },
-  {
-    "name": "AI Product Descriptions",
-    "description": "Generate compelling, SEO-ready product copy at scale. One click, on-brand, every time.",
-    "category": "AI",
-    "icon": "✍️",
-    "repo": "jungeltelegrafen/ai-product-descriptions",
-    "url": "",
-    "status": "live"
-  },
-  {
-    "name": "Price Monitor",
-    "description": "Track competitor pricing live and get smart suggestions to stay competitive without sacrificing margin.",
-    "category": "Intelligence",
-    "icon": "💸",
-    "repo": "jungeltelegrafen/price-monitor",
-    "url": "",
-    "status": "live"
-  },
-  {
-    "name": "Listing Optimizer",
-    "description": "Audit and improve your listings with AI-powered recommendations for titles, images, and keywords.",
-    "category": "AI",
-    "icon": "🚀",
-    "repo": "jungeltelegrafen/listing-optimizer",
-    "url": "",
-    "status": "live"
-  },
-  {
-    "name": "Order Automation",
-    "description": "Route, tag, and process incoming orders automatically — reducing manual steps and handling time.",
-    "category": "Automation",
-    "icon": "🔄",
-    "repo": "jungeltelegrafen/order-automation",
-    "url": "",
-    "status": "live"
-  },
-  {
-    "name": "Review Manager",
-    "description": "Monitor and respond to customer reviews with AI-drafted replies. Protect and grow your reputation.",
-    "category": "AI",
-    "icon": "🌟",
-    "repo": "jungeltelegrafen/review-manager",
-    "url": "",
-    "status": "live"
-  },
-  {
-    "name": "Analytics Dashboard",
-    "description": "A single view of revenue, conversion, and traffic across all your marketplace storefronts.",
-    "category": "Intelligence",
-    "icon": "📊",
-    "repo": "jungeltelegrafen/analytics-dashboard",
-    "url": "",
-    "status": "live"
-  },
-  {
-    "name": "Bulk Importer",
-    "description": "Upload thousands of SKUs in minutes with smart field mapping and automatic validation.",
-    "category": "Automation",
-    "icon": "📥",
-    "repo": "jungeltelegrafen/bulk-importer",
-    "url": "",
-    "status": "live"
-  },
-  {
-    "name": "Campaign Builder",
-    "description": "Design and schedule promotional campaigns with audience targeting and performance tracking built in.",
-    "category": "Intelligence",
-    "icon": "📣",
-    "repo": "jungeltelegrafen/campaign-builder",
-    "url": "",
-    "status": "live"
-  },
-  {
     "name": "CV Generator",
     "description": "Upload your existing CV or LinkedIn export and get a polished PDF and Word document in seconds.",
     "category": "Documents",
@@ -88,5 +7,86 @@
     "url": "https://jungeltelegrafen.github.io/cv-generator/",
     "repo": "jungeltelegrafen/cv-generator",
     "status": "live"
+  },
+  {
+    "name": "Suggestion: ReqMatcher",
+    "description": "Paste a client requirement and instantly get a ranked shortlist from your consultant bench — matched on skills, seniority, location and availability.",
+    "category": "AI",
+    "icon": "🎯",
+    "repo": "",
+    "url": "",
+    "status": "suggestion"
+  },
+  {
+    "name": "Suggestion: Semantic CV Search",
+    "description": "Search your entire consultant pool in plain language. \"Senior Java dev with fintech experience near Oslo\" — get results in under a second.",
+    "category": "AI",
+    "icon": "🔍",
+    "repo": "",
+    "url": "",
+    "status": "suggestion"
+  },
+  {
+    "name": "Suggestion: SalesPiper",
+    "description": "Visual pipeline for IT consultant placements — from first contact to signed contract. Track deals, forecast revenue and never let a hot lead go cold.",
+    "category": "Sales",
+    "icon": "📈",
+    "repo": "",
+    "url": "",
+    "status": "suggestion"
+  },
+  {
+    "name": "Suggestion: EmailAutomater",
+    "description": "Personalised outreach sequences for candidates and clients — auto-triggered by pipeline stage. Write once, let it run.",
+    "category": "Automation",
+    "icon": "✉️",
+    "repo": "",
+    "url": "",
+    "status": "suggestion"
+  },
+  {
+    "name": "Suggestion: BenchAlert",
+    "description": "Track when your placed consultants are rolling off engagements. Get notified weeks in advance so you can line up the next gig before they go idle.",
+    "category": "Automation",
+    "icon": "⏰",
+    "repo": "",
+    "url": "",
+    "status": "suggestion"
+  },
+  {
+    "name": "Suggestion: RateRadar",
+    "description": "Live benchmarking of IT consultant day rates across Norwegian market segments. Know if your rates are competitive before you send a proposal.",
+    "category": "Intelligence",
+    "icon": "💰",
+    "repo": "",
+    "url": "",
+    "status": "suggestion"
+  },
+  {
+    "name": "Suggestion: ClientBriefParser",
+    "description": "Paste any client brief or job spec and get a clean structured requirement card — with suggested skill tags, seniority level and a first-pass shortlist.",
+    "category": "AI",
+    "icon": "📋",
+    "repo": "",
+    "url": "",
+    "status": "suggestion"
+  },
+  {
+    "name": "Suggestion: ContractGen",
+    "description": "Generate consultant agreements, NDAs and statements of work from your templates in one click. Fill in the variables, download a ready-to-sign PDF.",
+    "category": "Documents",
+    "icon": "📝",
+    "repo": "",
+    "url": "",
+    "status": "suggestion"
+  },
+  {
+    "name": "Suggestion: TalentMapper",
+    "description": "A visual skill map of your entire consultant network. See who has what, spot gaps, and identify which profiles to prioritise sourcing next.",
+    "category": "Intelligence",
+    "icon": "🗺️",
+    "repo": "",
+    "url": "",
+    "status": "suggestion"
   }
 ]

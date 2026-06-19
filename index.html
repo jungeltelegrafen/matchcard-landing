@@ -41,12 +41,14 @@
         const res = await fetch('./services.json');
         const services = await res.json();
         grid.innerHTML = services.map(s => {
+          const isSuggestion = s.status === 'suggestion';
+          const tagClass = isSuggestion ? 'tag-suggestion' : 'tag';
           const inner = `
             <div class="card-icon">${s.icon}</div>
             <h2>${s.name}</h2>
             <p>${s.description}</p>
             <div class="card-footer">
-              <span class="tag">${s.category}</span>
+              <span class="${tagClass}">${s.category}</span>
               ${s.url ? `<span class="card-link">Open →</span>` : '<span class="card-coming-soon">Coming soon</span>'}
             </div>
           `;

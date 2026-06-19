@@ -185,6 +185,18 @@ main {
   font-style: italic;
 }
 
+.tag-suggestion {
+  display: inline-block;
+  padding: 4px 12px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  background: #F0F0F0;
+  color: #999;
+  border-radius: var(--radius-tag);
+}
+
 /* ── Skeleton loader ── */
 .skeleton {
   background: var(--card-bg);
