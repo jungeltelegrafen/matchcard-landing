@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --font-jakarta: 'Plus Jakarta Sans', system-ui, sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html {
+  font-family: var(--font-jakarta);
+  background-color: #F5EFE6;
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer utilities {
+  .animated-gradient-text {
+    background: linear-gradient(
+      90deg,
+      #C97B4B 0%,
+      #E8A87C 25%,
+      #1A1A2E 50%,
+      #C97B4B 75%,
+      #E8A87C 100%
+    );
+    background-size: 200% auto;
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: shimmer 4s linear infinite;
+  }
+}

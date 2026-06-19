@@ -1,28 +1,24 @@
+import { NextResponse } from 'next/server'
+
 export const config = {
-  matcher: ['/((?!api/auth|login).*)'],
+  matcher: ['/((?!api/auth|login|_next|favicon).*)'],
 }
 
 export default async function middleware(request) {
-  // Auth is disabled until Azure env vars are configured
-  if (!process.env.AZURE_CLIENT_ID) {
-    return new Response(null, { status: 200 })
-  }
-
-  const url = new URL(request.url)
+  if (!process.env.AZURE_CLIENT_ID) return NextResponse.next()
 
   const session = getCookie(request, '__session')
-  if (session && await verifySession(session)) {
-    return new Response(null, { status: 200 })
-  }
+  if (session && await verifySession(session)) return NextResponse.next()
 
-  const next = encodeURIComponent(url.pathname + url.search)
-  return Response.redirect(new URL(`/login.html?next=${next}`, url.origin))
+  const url  = request.nextUrl.clone()
+  const next = encodeURIComponent(request.nextUrl.pathname + request.nextUrl.search)
+  url.pathname = '/login'
+  url.search   = `?next=${next}`
+  return NextResponse.redirect(url)
 }
 
 function getCookie(request, name) {
-  const header = request.headers.get('cookie') || ''
-  const match = header.match(new RegExp(`(?:^|; )${name}=([^;]*)`))
-  return match ? decodeURIComponent(match[1]) : null
+  return request.cookies.get(name)?.value ?? null
 }
 
 async function verifySession(token) {
@@ -33,16 +29,12 @@ async function verifySession(token) {
       { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']
     )
     const valid = await crypto.subtle.verify(
-      'HMAC', key,
-      hexToBuffer(sig),
-      new TextEncoder().encode(data)
+      'HMAC', key, hexToBuffer(sig), new TextEncoder().encode(data)
     )
     if (!valid) return false
     const { exp } = JSON.parse(atob(data))
     return Date.now() < exp
-  } catch {
-    return false
-  }
+  } catch { return false }
 }
 
 function hexToBuffer(hex) {
