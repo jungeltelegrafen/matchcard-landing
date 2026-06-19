@@ -17,7 +17,7 @@ export default function Home() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-accent" />
             </span>
-            Now live: CV Generator
+            ✦ Now live: CV Generator
           </div>
 
           <h1 className="mt-4 text-5xl font-extrabold tracking-tight sm:text-6xl">
