@@ -1,5 +1,5 @@
 export const config = {
-  matcher: ['/((?!api/auth).*)'],
+  matcher: ['/((?!api/auth|login).*)'],
 }
 
 export default async function middleware(request) {
@@ -15,17 +15,8 @@ export default async function middleware(request) {
     return new Response(null, { status: 200 })
   }
 
-  const params = new URLSearchParams({
-    client_id:     process.env.AZURE_CLIENT_ID,
-    response_type: 'code',
-    redirect_uri:  `${url.origin}/api/auth/callback`,
-    scope:         'openid email profile',
-    state:         url.pathname + url.search,
-  })
-
-  return Response.redirect(
-    `https://login.microsoftonline.com/${process.env.AZURE_TENANT_ID}/oauth2/v2.0/authorize?${params}`
-  )
+  const next = encodeURIComponent(url.pathname + url.search)
+  return Response.redirect(new URL(`/login.html?next=${next}`, url.origin))
 }
 
 function getCookie(request, name) {
