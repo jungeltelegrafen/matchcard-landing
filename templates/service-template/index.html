@@ -1,11 +1,17 @@
 <!doctype html>
-<html lang="en">
+<html lang="nb">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Matchcard Service</title>
-    <!-- Connects this prototype to matchcard.no — shows a slim sandbox banner at the top -->
-    <script src="https://matchcard.no/sandbox-banner.js"></script>
+    <!-- Only load sandbox banner in production — avoids the 28px padding-top on localhost -->
+    <script>
+      if (location.hostname !== 'localhost' && !location.hostname.startsWith('127.')) {
+        var s = document.createElement('script');
+        s.src = 'https://matchcard.no/sandbox-banner.js';
+        document.head.appendChild(s);
+      }
+    </script>
   </head>
   <body>
     <div id="root"></div>
