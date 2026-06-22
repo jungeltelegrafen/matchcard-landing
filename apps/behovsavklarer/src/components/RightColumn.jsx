@@ -25,7 +25,7 @@ export default function RightColumn({ brief, setField, pendingFill, onAccept, on
         <InlineField
           label="Tilbudsformat overfor kunden"
           type="textarea" rows={2}
-          placeholder="Standard tilbudsformat: e-postformat med praktisk info + spisset CV, evt. med kompetanseskjema"
+          placeholder="E-postformat med praktisk info + spisset CV, evt. med kompetanseskjema"
           {...f('tilbudsformat')}
         />
 

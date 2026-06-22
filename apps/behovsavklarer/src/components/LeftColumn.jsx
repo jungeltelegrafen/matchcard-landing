@@ -107,7 +107,7 @@ export default function LeftColumn({ brief, setField, pendingFill, onAccept, onR
               placeholder:text-tx-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/30"
           />
           <p className="text-[11px] font-medium text-tx pt-0.5">
-            Å avklare senioriteten kan avdekke prisforventninger kunden ellers ikke deler åpent
+            Å avklare senioriteten kan avdekke viktige detaljer om profilen som søkes
           </p>
         </div>
 
@@ -117,7 +117,7 @@ export default function LeftColumn({ brief, setField, pendingFill, onAccept, onR
           placeholder="Budsjett godkjent? F.eks. 1 200–1 400 kr/t"
           {...f('budsjett')}
         />
-        <InlineField label="Leveransefrist CVer" type="date" {...f('leveransefristCver')} />
+        <InlineField label="Leveransefrist CVer til kunden" type="date" {...f('leveransefristCver')} />
         <InlineField label="Søknadsfrist" type="date" {...f('soknadsfrist')} />
       </div>
     </aside>

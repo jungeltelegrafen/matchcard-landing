@@ -84,7 +84,6 @@ export default function CenterColumn({
 
       {/* Bakgrunn */}
       <section className="space-y-3">
-        <h3 className={sectionHeading}>Bakgrunn for behovet</h3>
         <InlineField
           label="Hva utløste behovet?"
           type="textarea" rows={4}

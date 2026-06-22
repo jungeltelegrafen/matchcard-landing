@@ -77,8 +77,8 @@ export function exportPdf(brief, opts = {}) {
     ['Senioritet',         brief.senioritet],
     ['Språkkrav',          brief.spraakkrav],
     ['Budsjett / timepris',brief.budsjett],
-    ['Frist CVer',         brief.leveransefristCver],
-    ['Søknadsfrist',       brief.soknadsfrist],
+    ['Leveransefrist CVer til kunden', brief.leveransefristCver],
+    ['Søknadsfrist (kandidater)',      brief.soknadsfrist],
   ].filter(([, v]) => v)
 
   if (logRows.length) {

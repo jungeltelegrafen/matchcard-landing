@@ -211,11 +211,12 @@ export default function App() {
         {/* Back to marketplace */}
         <a
           href="/"
-          className="absolute left-5 flex items-center gap-1.5 group transition-colors"
+          className="absolute left-5 flex items-center gap-1.5 rounded-lg border border-border/60
+            bg-[#EDE3D8] hover:bg-[#E3D7C8] px-3 py-1.5 transition-colors group"
           title="Tilbake til matchcard"
         >
-          <span className="text-base text-tx-muted group-hover:text-primary transition-all group-hover:-translate-x-0.5 inline-block">←</span>
-          <span className="text-[15px] font-bold text-accent tracking-tight group-hover:text-accent/70 transition-colors">matchcard</span>
+          <span className="text-sm text-tx-muted group-hover:-translate-x-0.5 transition-transform inline-block">←</span>
+          <span className="text-xs font-bold text-accent tracking-tight">matchcard</span>
         </a>
 
         {/* Centered title */}
@@ -233,8 +234,8 @@ export default function App() {
           )}
           <button
             onClick={handleClear}
-            className="rounded-lg border border-border px-3 py-1.5 text-xs font-semibold text-tx
-              hover:bg-bg hover:text-primary transition-colors"
+            className="rounded-lg border border-border/60 bg-[#EDE3D8] hover:bg-[#E3D7C8]
+              px-3 py-1.5 text-xs font-semibold text-tx transition-colors"
           >
             Nullstill
           </button>

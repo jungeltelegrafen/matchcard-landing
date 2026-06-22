@@ -22,8 +22,8 @@ function buildText(brief, opts = {}) {
     ['Senioritet',        brief.senioritet],
     ['Språkkrav',         brief.spraakkrav],
     ['Budsjett / timepris', brief.budsjett],
-    ['Frist CVer',        d(brief.leveransefristCver)],
-    ['Søknadsfrist',      d(brief.soknadsfrist)],
+    ['Leveransefrist CVer til kunden', d(brief.leveransefristCver)],
+    ['Søknadsfrist (kandidater)',      d(brief.soknadsfrist)],
   ].filter(([, v]) => v)
 
   if (logistics.length) {
@@ -47,8 +47,7 @@ function buildText(brief, opts = {}) {
   if (brief.prosessenVidere)      s.push(`PROSESSEN VIDERE\n${brief.prosessenVidere}`)
   if (brief.andreLeverandorer)    s.push(`ANDRE LEVERANDØRER\n${brief.andreLeverandorer}`)
   if (brief.andreKandidater)      s.push(`ANDRE KANDIDATER\n${brief.andreKandidater}`)
-  if (brief.tilbudsformat && brief.tilbudsformat !== 'Standard NC')
-                                  s.push(`TILBUDSFORMAT\n${brief.tilbudsformat}`)
+  if (brief.tilbudsformat)        s.push(`TILBUDSFORMAT\n${brief.tilbudsformat}`)
   if (brief.annet)                s.push(`ANNET\n${brief.annet}`)
   if (brief.generelleNotater)     s.push(`NOTATER\n${brief.generelleNotater}`)
 
