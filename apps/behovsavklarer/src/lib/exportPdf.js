@@ -71,14 +71,14 @@ export function exportPdf(brief, opts = {}) {
     ['Rolle',              brief.rolle],
     ['Antall konsulenter', brief.antallKonsulenter],
     ['Stillingsprosent',   brief.stillingsprosent],
-    ['Oppstartsdato',      brief.oppstartsdato],
+    ['Oppstartsdato',      d(brief.oppstartsdato)],
     ['Varighet',           brief.varighet],
     ['Lokasjon',           [brief.onsiteRemote, brief.hybridDetaljer, brief.arbeidslokasjon].filter(Boolean).join(' — ')],
     ['Senioritet',         brief.senioritet],
     ['Språkkrav',          brief.spraakkrav],
     ['Budsjett / timepris',brief.budsjett],
-    ['Leveransefrist CVer til kunden', brief.leveransefristCver],
-    ['Søknadsfrist kandidater',        brief.soknadsfrist],
+    ['Leveransefrist CVer til kunden', d(brief.leveransefristCver)],
+    ['Søknadsfrist kandidater',        d(brief.soknadsfrist)],
   ].filter(([, v]) => v)
 
   if (logRows.length) {
@@ -134,4 +134,10 @@ export function exportPdf(brief, opts = {}) {
 
 function slug(s) {
   return s.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9\-]/g, '').slice(0, 40)
+}
+
+function d(iso) {
+  if (!iso) return ''
+  const [y, m, day] = iso.split('-')
+  return day ? `${day}.${m}.${y}` : iso
 }

@@ -3,8 +3,8 @@
   "description": "Strukturer klientens behov til en ren oppdragsbeskrivelse klar for eksport.",
   "category": "Automation",
   "icon": "📋",
-  "url": "https://jungeltelegrafen.github.io/behovsavklarer/",
-  "status": "sandbox",
+  "url": "https://matchcard.no/behovsavklarer",
+  "status": "live",
   "auth": {
     "required": false,
     "provider": "microsoft",

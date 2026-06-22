@@ -4,9 +4,9 @@
     "description": "Strukturer klientens behov til en ren oppdragsbeskrivelse klar for eksport.",
     "category": "Automation",
     "icon": "📋",
-    "url": "https://jungeltelegrafen.github.io/behovsavklarer/",
+    "url": "https://matchcard.no/behovsavklarer",
     "repo": "jungeltelegrafen/behovsavklarer",
-    "status": "sandbox"
+    "status": "live"
   },
   {
     "name": "CV Generator",
