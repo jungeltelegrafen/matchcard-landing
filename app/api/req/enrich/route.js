@@ -19,21 +19,18 @@ export async function GET() {
 
 // ── AI system prompt ──────────────────────────────────────────────────────────
 // Full criteria documented in CRITERIA.md next to this file.
-const SYSTEM = `Du hjelper norske IT-rekrutterere med å presentere kunder som arbeidsgivere for tech-kandidater.
+const SYSTEM = `Du hjelper norske IT-rekrutterere med å raskt forstå hvem kunden er.
 
-Skriv NØYAKTIG to avsnitt på norsk. Ingen titler, headers, markdown eller avsnittoverskrifter av noe slag.
+Skriv ETT avsnitt på norsk — 2 til 5 setninger. Ingen titler, headers, markdown, eller labels av noe slag.
 
-Avsnitt 1 — Selskapet: Størrelse, bransje, markedsposisjon og annen relevant kontekst om hvem de er.
-
-Avsnitt 2 — Som arbeidsgiver: Hva som er kjent om arbeidsmiljø, fagkultur og hvordan selskapet fremstår for tech-kandidater. Trekk frem ekte, positive aspekter basert på hva selskapet faktisk kommuniserer om seg selv. Skriv det som en naturlig, faktabasert presentasjon — ikke en oppramsing av punkter.
+Innholdet skal dekke: hvem selskapet er, bransje, størrelse, markedsposisjon, eierskap og annen relevant faktabasert kontekst.
 
 Absolutte regler:
-- Ingen titler, seksjonsnavn, overskrifter eller labels foran avsnittene ("Selskapet:", "IT-avdeling:", osv.)
-- Ikke nevn spesifikke teknologier, tech stack eller systemvalg — det hører hjemme i egne felt i skjemaet
-- Baser deg utelukkende på bekreftet offentlig informasjon (nettside, LinkedIn, pressemeldinger, årsrapporter)
-- Gjør ALDRI antagelser om hva IT-avdelingen jobber med hvis det ikke er eksplisitt dokumentert
-- Spekuler ikke — utelat heller informasjon du ikke finner
-- Hvis lite finnes: skriv ett kortfattet avsnitt med det du vet, og ikke fyll inn med gjetning`
+- Kun bekreftet offentlig informasjon (selskapets nettside, presse, årsrapporter, offentlige registre)
+- Ingen tech stack, ingen spesifikke teknologier eller systemvalg
+- Ingen antagelser — utelat informasjon du ikke finner, spekuler aldri
+- Ingen overskrifter, ingen labels, ikke start med selskapets navn etterfulgt av tankestrek eller kolon
+- Hvis lite finnes: skriv det du med sikkerhet vet i 1–2 setninger`
 
 async function synthesize(rawContext, companyName) {
   const message = await client.messages.create({
@@ -42,7 +39,7 @@ async function synthesize(rawContext, companyName) {
     system: SYSTEM,
     messages: [{
       role: 'user',
-      content: `Selskap: "${companyName}"\n\nKildemateriale fra søk:\n${rawContext}\n\nSkriv to faktabaserte avsnitt basert utelukkende på det ovenfor. Ingen titler eller labels.`,
+      content: `Selskap: "${companyName}"\n\nKildemateriale fra søk:\n${rawContext}\n\nSkriv ett faktabasert avsnitt (2–5 setninger) basert utelukkende på det ovenfor. Ingen titler eller labels.`,
     }],
   })
   return message.content[0]?.text?.trim()

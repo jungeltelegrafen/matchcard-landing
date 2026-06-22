@@ -85,9 +85,20 @@ BRIEF:
 ${JSON.stringify(brief, null, 2).slice(0, 10000)}`
   } else if (mode === 'distill') {
     if (!text?.trim()) return Response.json({ error: 'No text provided' }, { status: 400, headers: CORS })
-    userPrompt = `Basert på følgende informasjon om konsulentbehovet, generer:
-1. "kjernenIBehovet": 1–2 setninger som destillerer essensen av behovet klart og presist
-2. "maHa": de 3 viktigste kompetansekravene som strenge strenger i en liste
+    userPrompt = `Du er ekspert på å identifisere faglig kjerne i IT-konsulentbehov.
+
+Analyser all informasjonen nedenfor og generer:
+
+1. "kjernenIBehovet": Hva er den faglige kompetansekjernen konsulenten MÅ besitte?
+   - Identifiser det overordnede fagdomenet (f.eks. nettverksarkitektur, fullstack-utvikling, dataplatform, skymigrering)
+   - Trekk ut de 2–3 viktigste spesifikke teknologiene/kompetansene: vekt de som nevnes oftest, nevnes først, eller fremheves eksplisitt
+   - Inkluder senioriteten hvis den er tydelig
+   - Nevn personlige egenskaper KUN hvis de er eksplisitt avgjørende for rollen
+   - Bruk faglig skjønn der dataene er mangelfulle — men marker det ikke
+   - IKKE beskriv kunden, bransjen eller prosjektkonteksten
+   Skriv 1–2 presise setninger som en kompetanseprofil. Eksempel: "Erfaren nettverksarkitekt med sterk kompetanse i Cisco og Palo Alto, vant til komplekse hybridmiljøer og selvstendig arbeid."
+
+2. "maHa": De 3–5 absolutt viktigste kompetansekravene som korte, presise strenger
 
 Svar med JSON som BARE inneholder disse to feltene.
 
@@ -100,7 +111,7 @@ ${text.slice(0, 8000)}`
 Bruk null for felt du ikke kan finne. Ikke finn på informasjon.
 
 Viktige instruksjoner for tekstfelter:
-- kjernenIBehovet: Destiller til 1-2 presise setninger som fanger essensen av hva klienten egentlig trenger
+- kjernenIBehovet: Identifiser det overordnede fagdomenet konsulenten skal dekke og de 2–3 viktigste spesifikke teknologiene/kompetansene (vekt dem som er nevnt oftest, nevnt først, eller eksplisitt fremhevet). Inkluder senioriteten hvis tydelig. Personlige egenskaper kun hvis eksplisitt avgjørende. Ikke nevn kunden, bransjen eller prosjektkonteksten. Skriv 1–2 presise setninger som en kompetanseprofil — ikke en stillingsbeskrivelse. Eksempel: "Erfaren dataingeniør med sterk kompetanse i Spark og Azure Data Factory, vant til å designe skalerbare datapipelines i finanssektoren."
 - Alle andre tekstfelter (prosjektbeskrivelse, arbeidsoppgaver, kundebeskrivelse, hvaUtlosteBehovet osv.): Behold den fulle teksten fra kilden — unngå bare duplikate setninger, men kutt ikke ned
 - tilbudsformat: UTELUKKENDE om FORMATET for innsending av CVer/kandidater til denne kunden — f.eks. "Standard NC CV", "Kompetanseskjema fra kunden", "Opplasting til kundeportal", "Kodegjennomgang + GitHub-profil", "E-post med PDF-vedlegg". IKKE om prosjektmetodikk eller leveranse. La stå tomt hvis kildematerialet ikke nevner spesifikke innsendingskrav.
 - onsiteRemote må være en av: "Onsite", "Remote", "Hybrid"
