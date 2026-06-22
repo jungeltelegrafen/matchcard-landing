@@ -1,0 +1,16 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #F5EFE6;
+  color: #2D2D2D;
+  -webkit-font-smoothing: antialiased;
+}
+
+@layer components {
+  .input {
+    @apply w-full rounded-lg border border-border bg-bg px-3 py-2 text-sm text-tx
+           placeholder:text-tx-muted/50 focus:outline-none focus:ring-2 focus:ring-accent/40;
+  }
+}

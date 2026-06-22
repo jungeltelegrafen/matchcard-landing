@@ -3,7 +3,7 @@
   "description": "One sentence describing what this tool does.",
   "category": "Automation",
   "icon": "🔧",
-  "url": "",
+  "url": "https://jungeltelegrafen.github.io/my-tool-name/",
   "status": "sandbox",
   "auth": {
     "required": false,
