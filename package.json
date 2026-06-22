@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "build:behovsavklarer": "cd apps/behovsavklarer && npm ci && npm run build && rm -rf ../../public/behovsavklarer && cp -r dist ../../public/behovsavklarer"
   },
   "devDependencies": {
     "autoprefixer": "^10.5.0",
