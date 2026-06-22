@@ -17,6 +17,46 @@ export async function GET() {
   return Response.json({ ok: true, configured }, { headers: CORS })
 }
 
+// ── Shared AI criteria ─────────────────────────────────────────────────────
+//
+// SEARCH QUERY (Tavily): "[selskap] IT-avdeling ansatte teknologi Norge"
+//   → targets company IT org size, structure, and tech stack from public sources
+//
+// AI SYSTEM RULES:
+//   - Only state facts findable in public sources (website, LinkedIn, press, annual reports)
+//   - Focus: company overview + IT org (size/structure/tech) + employer branding for tech candidates
+//   - Never assume what the IT dept "likely" works with based on industry logic
+//   - Omit any claim that cannot be confirmed from search results — do NOT guess
+//   - Write in third person, neutral and concise Norwegian
+//   - If little info is available: say so honestly rather than filling gaps with speculation
+//
+const SYSTEM = `Du hjelper norske IT-rekrutterere med å forstå kunder bedre — basert kun på offentlig tilgjengelig informasjon.
+
+Skriv 3–5 faktabaserte setninger på norsk om selskapet. Fokuser på:
+1. Hvem de er: bransje, størrelse, markedsposisjon
+2. IT-avdelingen: størrelse, struktur og teknologier — KUN det som er dokumentert fra pålitelige kilder
+3. Employer branding: hvordan fremstiller selskapet seg som arbeidsgiver for tech-kandidater?
+
+Strenge regler:
+- Baser deg utelukkende på tekst du faktisk finner via søk eller i kildematerialet
+- Gjør ALDRI antagelser om IT-avdelingen basert på bransjekunnskap ("de bruker trolig…", "selskaper av denne typen…")
+- Utelat informasjon du ikke finner — det er bedre å si lite enn å spekulere
+- Hvis du finner lite: si det ærlig i én setning ("Begrenset offentlig informasjon tilgjengelig om IT-avdelingen.")
+- Skriv som om du presenterer selskapet til en kvalifisert tech-kandidat som vurderer å søke`
+
+async function synthesize(rawContext, companyName) {
+  const message = await client.messages.create({
+    model: 'claude-haiku-4-5-20251001',
+    max_tokens: 600,
+    system: SYSTEM,
+    messages: [{
+      role: 'user',
+      content: `Selskap: "${companyName}"\n\nKildemateriale fra søk:\n${rawContext}\n\nSkriv en faktabasert kundebeskrivelse basert utelukkende på det ovenfor.`,
+    }],
+  })
+  return message.content[0]?.text?.trim()
+}
+
 export async function POST(request) {
   let body
   try { body = await request.json() } catch {
@@ -26,7 +66,9 @@ export async function POST(request) {
   const { query } = body
   if (!query?.trim()) return Response.json({ error: 'No query' }, { status: 400, headers: CORS })
 
-  // ── Option 1: Tavily (real-time web search) ───────────────────────────────
+  const searchQuery = `"${query}" IT-avdeling ansatte teknologi Norge`
+
+  // ── Option 1: Tavily → Claude synthesis ──────────────────────────────────
   if (process.env.TAVILY_API_KEY) {
     try {
       const res = await fetch('https://api.tavily.com/search', {
@@ -34,44 +76,49 @@ export async function POST(request) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           api_key: process.env.TAVILY_API_KEY,
-          query: `${query} selskap Norge`,
+          query: searchQuery,
           search_depth: 'advanced',
-          max_results: 3,
-          include_answer: true,
+          max_results: 5,
+          include_answer: false,
           exclude_domains: ['linkedin.com'],
         }),
       })
       if (res.ok) {
         const data = await res.json()
-        const parts = []
-        if (data.answer) parts.push(data.answer)
-        if (data.results?.[0]?.content) parts.push(data.results[0].content.slice(0, 400))
-        const summary = parts.join('\n\n').trim()
-        if (summary) return Response.json({ summary }, { headers: CORS })
+        const snippets = (data.results || [])
+          .map(r => `[${r.url}]\n${r.content}`)
+          .filter(Boolean)
+          .join('\n\n')
+          .slice(0, 4000)
+
+        if (snippets) {
+          const summary = await synthesize(snippets, query)
+          if (summary) return Response.json({ summary }, { headers: CORS })
+        }
       }
     } catch { /* fall through */ }
   }
 
-  // ── Option 2: Claude with web_search tool ─────────────────────────────────
+  // ── Option 2: Claude web_search tool ─────────────────────────────────────
   if (!process.env.ANTHROPIC_API_KEY) {
     return Response.json({ error: 'Ingen søke-API konfigurert' }, { status: 503, headers: CORS })
   }
 
-  const userPrompt = `Finn informasjon om selskapet "${query}" i Norge. Skriv 2–5 korte, presise setninger om hvem de er, hva de gjør, bransje, størrelse og hva slags IT-kompetanse de typisk trenger. Svar på norsk.`
-
-  // Try with web_search tool first (real-time results)
   try {
-    const messages = [{ role: 'user', content: userPrompt }]
+    const messages = [{
+      role: 'user',
+      content: `Søk etter "${query}" og finn offentlig tilgjengelig informasjon om:\n- Selskapets størrelse, bransje og markedsposisjon\n- IT-avdelingen: størrelse, struktur, kjente teknologier (kun dokumentert)\n- Employer branding mot tech-kandidater\n\nBaser deg kun på det du faktisk finner. Ikke spekuler.`,
+    }]
     const tools = [{ type: 'web_search_20250305', name: 'web_search' }]
 
     let response = await client.messages.create({
       model: 'claude-haiku-4-5-20251001',
       max_tokens: 1024,
+      system: SYSTEM,
       tools,
       messages,
     })
 
-    // Handle tool use loop (max 2 more turns)
     for (let i = 0; i < 2 && response.stop_reason === 'tool_use'; i++) {
       messages.push({ role: 'assistant', content: response.content })
       const toolResults = response.content
@@ -81,6 +128,7 @@ export async function POST(request) {
       response = await client.messages.create({
         model: 'claude-haiku-4-5-20251001',
         max_tokens: 1024,
+        system: SYSTEM,
         tools,
         messages,
       })
@@ -95,14 +143,16 @@ export async function POST(request) {
     if (text) return Response.json({ summary: text }, { headers: CORS })
   } catch { /* web_search tool not available — fall through */ }
 
-  // ── Option 3: Claude knowledge fallback ───────────────────────────────────
+  // ── Option 3: Claude knowledge fallback (no search) ──────────────────────
+  // Note: explicitly tells Claude to only use confirmed knowledge, not speculate.
   try {
     const message = await client.messages.create({
       model: 'claude-haiku-4-5-20251001',
-      max_tokens: 512,
+      max_tokens: 600,
+      system: SYSTEM,
       messages: [{
         role: 'user',
-        content: userPrompt + '\n\nHvis du ikke har nok informasjon, si det kort og ærlig.',
+        content: `Selskap: "${query}" (Norge)\n\nDu har ikke tilgang til live søkeresultater. Del kun det du med sikkerhet vet om dette selskapet fra treningsdata — ikke spekuler. Hvis du vet lite, si det kortfattet og ærlig.`,
       }],
     })
     const summary = message.content[0]?.text?.trim()
