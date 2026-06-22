@@ -102,6 +102,7 @@ Bruk null for felt du ikke kan finne. Ikke finn på informasjon.
 Viktige instruksjoner for tekstfelter:
 - kjernenIBehovet: Destiller til 1-2 presise setninger som fanger essensen av hva klienten egentlig trenger
 - Alle andre tekstfelter (prosjektbeskrivelse, arbeidsoppgaver, kundebeskrivelse, hvaUtlosteBehovet osv.): Behold den fulle teksten fra kilden — unngå bare duplikate setninger, men kutt ikke ned
+- tilbudsformat: UTELUKKENDE om FORMATET for innsending av CVer/kandidater til denne kunden — f.eks. "Standard NC CV", "Kompetanseskjema fra kunden", "Opplasting til kundeportal", "Kodegjennomgang + GitHub-profil", "E-post med PDF-vedlegg". IKKE om prosjektmetodikk eller leveranse. La stå tomt hvis kildematerialet ikke nevner spesifikke innsendingskrav.
 - onsiteRemote må være en av: "Onsite", "Remote", "Hybrid"
 - maHa og fintAHa skal være lister med strenger
 - Datoer skal være på ISO-format: YYYY-MM-DD
