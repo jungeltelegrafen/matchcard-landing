@@ -30,9 +30,6 @@ export default function RightColumn({ brief, setField, pendingFill, onAccept, on
         />
 
         <section className="space-y-3">
-          <h3 className="text-[10px] font-semibold uppercase tracking-widest text-tx">
-            Samarbeidsstruktur kunde ↔ NC
-          </h3>
           <InlineField
             label="Prosessen videre?"
             type="textarea" rows={3}
