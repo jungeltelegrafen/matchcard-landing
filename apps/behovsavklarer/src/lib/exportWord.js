@@ -86,7 +86,7 @@ export async function exportWord(brief, opts = {}) {
     ['Språkkrav',          brief.spraakkrav],
     ['Budsjett / timepris',brief.budsjett],
     ['Leveransefrist CVer til kunden', d(brief.leveransefristCver)],
-    ['Søknadsfrist (kandidater)',      d(brief.soknadsfrist)],
+    ['Søknadsfrist kandidater',        d(brief.soknadsfrist)],
   ].filter(([, v]) => v)
 
   if (logisticsRows.length) {
