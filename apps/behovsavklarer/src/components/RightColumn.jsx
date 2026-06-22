@@ -17,19 +17,21 @@ export default function RightColumn({ brief, setField, pendingFill, onAccept, on
       <div className="space-y-6">
 
         <InlineField
-          label="Web-URL (stillingsannonse) — Valgfri"
+          label="Web-URL (oppdragsannonse) — Valgfri"
           placeholder="https://…"
           {...f('webUrl')}
         />
 
-        <InlineField
-          label="Tilbudsformat overfor kunden"
-          type="textarea" rows={2}
-          placeholder="E-postformat med praktisk info + spisset CV, evt. med kompetanseskjema"
-          {...f('tilbudsformat')}
-        />
-
         <section className="space-y-3">
+          <h3 className="text-[10px] font-semibold uppercase tracking-widest text-tx">
+            Samarbeidsstruktur kunde ↔ NC
+          </h3>
+          <InlineField
+            label="Tilbudsformat overfor kunden"
+            type="textarea" rows={2}
+            placeholder="E-postformat med praktisk info + spisset CV, evt. med kompetanseskjema"
+            {...f('tilbudsformat')}
+          />
           <InlineField
             label="Prosessen videre?"
             type="textarea" rows={3}

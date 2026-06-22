@@ -91,7 +91,7 @@ export function buildWordpressHtml(brief, opts = {}) {
   }
 
   if (brief.webUrl) {
-    parts.push(`<p><a href="${esc(brief.webUrl)}" target="_blank" rel="noopener noreferrer">Les mer og søk her</a></p>\n`)
+    parts.push(`<p><a href="${esc(brief.webUrl)}" target="_blank" rel="noopener noreferrer">Se oppdragsannonse og søk her</a></p>\n`)
   }
 
   return parts.join('')
