@@ -12,8 +12,10 @@ const CATEGORY_COLORS = {
 }
 
 export default function ServiceCard({ service, index }) {
-  const isLive       = !!service.url
+  const isLive       = service.status === 'live'
+  const isSandbox    = service.status === 'sandbox'
   const isSuggestion = service.status === 'suggestion'
+  const isClickable  = isLive || isSandbox
   const tagColor     = CATEGORY_COLORS[service.category] || 'bg-gray-100 text-gray-500 border-gray-200'
 
   const card = (
@@ -21,22 +23,28 @@ export default function ServiceCard({ service, index }) {
       initial={{ opacity: 0, y: 20, filter: 'blur(6px)' }}
       animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
       transition={{ duration: 0.45, delay: index * 0.06, ease: [0.25, 0.4, 0.25, 1] }}
-      whileHover={isLive ? { y: -3, transition: { duration: 0.18 } } : {}}
+      whileHover={isClickable ? { y: -3, transition: { duration: 0.18 } } : {}}
       className={cn(
         'group flex flex-col gap-4 rounded-2xl border bg-card p-6',
         'transition-all duration-200',
-        isLive
-          ? 'border-accent/30 shadow-[0_2px_12px_rgba(201,123,75,0.08)] hover:shadow-[0_8px_32px_rgba(201,123,75,0.16)] hover:border-accent/50 cursor-pointer'
-          : 'border-border shadow-sm opacity-55',
+        isLive    && 'border-accent/30 shadow-[0_2px_12px_rgba(201,123,75,0.08)] hover:shadow-[0_8px_32px_rgba(201,123,75,0.16)] hover:border-accent/50 cursor-pointer',
+        isSandbox && 'border-border shadow-sm hover:shadow-md hover:border-border/80 cursor-pointer',
+        isSuggestion && 'border-border shadow-sm opacity-55',
       )}
     >
-      {/* Icon + live indicator */}
+      {/* Icon + status badge */}
       <div className="flex items-start justify-between">
         <span className="text-3xl leading-none">{service.icon}</span>
         {isLive && (
           <span className="flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-emerald-600 border border-emerald-200">
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
             Live
+          </span>
+        )}
+        {isSandbox && (
+          <span className="flex items-center gap-1.5 rounded-full bg-slate-50 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-slate-500 border border-slate-200">
+            <span className="h-1.5 w-1.5 rounded-full bg-slate-400" />
+            Sandbox
           </span>
         )}
       </div>
@@ -64,14 +72,19 @@ export default function ServiceCard({ service, index }) {
             Open →
           </span>
         )}
+        {isSandbox && (
+          <span className="text-xs font-semibold text-slate-400 group-hover:text-slate-600 transition-colors">
+            Open ↗
+          </span>
+        )}
         {isSuggestion && (
-          <span className="text-[11px] text-tx-muted/50 italic">Suggestion</span>
+          <span className="text-[11px] text-tx-muted/50 italic">On roadmap</span>
         )}
       </div>
     </motion.div>
   )
 
-  if (isLive) {
+  if (isClickable) {
     return (
       <Link href={service.url} target="_blank" rel="noopener" className="block">
         {card}
