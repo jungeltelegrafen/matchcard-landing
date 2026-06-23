@@ -238,9 +238,8 @@ export default function App() {
             onClick={() => setFeedbackOpen(true)}
             className="rounded-lg border border-border bg-white hover:bg-bg
               px-3 py-1.5 text-xs font-semibold text-tx-muted hover:text-tx transition-colors"
-            title="Send tilbakemelding"
           >
-            💬
+            💬 Produkttilbakemelding
           </button>
           <button
             onClick={handleClear}

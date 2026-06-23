@@ -20,21 +20,23 @@ export async function GET() {
 
 export async function POST(request) {
   const body = await request.json().catch(() => ({}))
-  const { type, message, name, briefRole, page } = body
+  const { type, subject, message, name, briefRole, page } = body
 
   if (!type || !message?.trim()) {
     return NextResponse.json({ error: 'Missing type or message' }, { status: 400 })
   }
 
   const meta = TYPE_META[type] || TYPE_META.general
+  const subjectLabel = subject?.trim() || 'Behovsavklarer'
   let github_issue_number = null
   let github_issue_url = null
 
   // ── GitHub Issue ────────────────────────────────────────────────────────────
   const token = process.env.gh_issues_read_write_jungeltel_matchcard
   if (token) {
-    const title = `${meta.emoji} ${message.trim().slice(0, 72)}${message.trim().length > 72 ? '…' : ''}`
-    const issueBody = buildIssueBody({ type, meta, message, name, briefRole, page })
+    const short = message.trim().slice(0, 60) + (message.trim().length > 60 ? '…' : '')
+    const title = `${meta.emoji} [${subjectLabel}] ${short}`
+    const issueBody = buildIssueBody({ type, meta, subject: subjectLabel, message, name, briefRole, page })
 
     // Try with labels first; fall back without if they don't exist in the repo
     const attemptCreate = async (labels) => {
@@ -86,14 +88,16 @@ export async function POST(request) {
   return NextResponse.json({ ok: true, github_issue_number, github_issue_url })
 }
 
-function buildIssueBody({ type, meta, message, name, briefRole, page }) {
+function buildIssueBody({ type, meta, subject, message, name, briefRole, page }) {
   const from = name?.trim() || 'Anonym'
   const context = briefRole ? `Rolle i skjemaet: **${briefRole}**` : 'Skjemaet var tomt'
   const ts = new Date().toLocaleString('no-NO', { timeZone: 'Europe/Oslo' })
 
-  return `## ${meta.emoji} ${meta.label}
+  return `## ${meta.emoji} Produkttilbakemelding — ${subject}
 
+**Type:** ${meta.label}
 **Fra:** ${from}
+**Gjelder:** ${subject}
 **Side:** ${page || '/behovsavklarer'}
 **Kontekst:** ${context}
 **Tidspunkt:** ${ts}

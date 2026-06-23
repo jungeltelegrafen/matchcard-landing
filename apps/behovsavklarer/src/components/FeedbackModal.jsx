@@ -9,34 +9,29 @@ const TYPES = [
 const PLACEHOLDERS = {
   bug:     'Beskriv hva som skjer og hva du forventet skulle skje…',
   feature: 'Beskriv hva du savner eller hva som hadde gjort verktøyet bedre…',
-  general: 'Del dine tanker…',
+  general: 'Del dine tanker om produktet…',
 }
 
 export default function FeedbackModal({ onClose, apiBase, briefRole }) {
   const [type,     setType]    = useState('general')
+  const [subject,  setSubject] = useState('Behovsavklarer')
   const [message,  setMessage] = useState('')
   const [name,     setName]    = useState('')
   const [showName, setShowName]= useState(false)
   const [status,   setStatus]  = useState('idle') // idle | sending | done | error
   const [result,   setResult]  = useState(null)
   const textareaRef = useRef(null)
-  const modalRef    = useRef(null)
 
-  // Focus textarea on open
   useEffect(() => {
     setTimeout(() => textareaRef.current?.focus(), 50)
   }, [])
 
-  // Escape to close (only when not done)
   useEffect(() => {
-    function onKey(e) {
-      if (e.key === 'Escape') onClose()
-    }
+    function onKey(e) { if (e.key === 'Escape') onClose() }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [onClose])
 
-  // Click outside to close
   function handleBackdrop(e) {
     if (e.target === e.currentTarget) onClose()
   }
@@ -51,6 +46,7 @@ export default function FeedbackModal({ onClose, apiBase, briefRole }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           type,
+          subject: subject.trim() || 'Behovsavklarer',
           message: message.trim(),
           name: name.trim() || undefined,
           briefRole: briefRole || undefined,
@@ -66,7 +62,6 @@ export default function FeedbackModal({ onClose, apiBase, briefRole }) {
     }
   }
 
-  // Cmd/Ctrl+Enter submits from textarea
   function handleTextareaKey(e) {
     if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') handleSubmit(e)
   }
@@ -79,18 +74,22 @@ export default function FeedbackModal({ onClose, apiBase, briefRole }) {
       onClick={handleBackdrop}
     >
       <div
-        ref={modalRef}
-        className="relative w-full max-w-md mx-4 rounded-2xl border border-border bg-card shadow-2xl"
+        className="relative w-full max-w-xl mx-4 rounded-2xl border border-border bg-card shadow-2xl"
         role="dialog"
         aria-modal="true"
-        aria-label="Send tilbakemelding"
+        aria-label="Produkttilbakemelding"
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 pt-5 pb-3">
-          <h2 className="text-[15px] font-semibold text-primary">Tilbakemelding</h2>
+        <div className="flex items-start justify-between px-6 pt-6 pb-1">
+          <div>
+            <h2 className="text-[17px] font-semibold text-primary">Produkttilbakemelding</h2>
+            <p className="text-[11px] text-tx-muted mt-0.5">
+              Hjelp oss forbedre verktøyet — alt er nyttig
+            </p>
+          </div>
           <button
             onClick={onClose}
-            className="text-tx-muted hover:text-primary transition-colors text-lg leading-none"
+            className="text-tx-muted hover:text-primary transition-colors text-xl leading-none mt-0.5"
             aria-label="Lukk"
           >
             ×
@@ -98,11 +97,13 @@ export default function FeedbackModal({ onClose, apiBase, briefRole }) {
         </div>
 
         {status === 'done' ? (
-          /* ── Success state ───────────────────────────────────────────────── */
-          <div className="px-5 pb-6 pt-2 flex flex-col items-center gap-3 text-center">
-            <div className="text-3xl">✓</div>
-            <p className="text-sm font-medium text-primary">Takk for tilbakemeldingen!</p>
-            <p className="text-xs text-tx-muted">Den er mottatt og vil bli gjennomgått.</p>
+          /* ── Success ─────────────────────────────────────────────────────── */
+          <div className="px-6 pb-8 pt-4 flex flex-col items-center gap-3 text-center">
+            <div className="text-4xl">✓</div>
+            <p className="text-sm font-semibold text-primary">Takk for tilbakemeldingen!</p>
+            <p className="text-xs text-tx-muted max-w-xs">
+              Den er mottatt og vil bli gjennomgått.
+            </p>
             {result?.github_issue_url && (
               <a
                 href={result.github_issue_url}
@@ -115,14 +116,14 @@ export default function FeedbackModal({ onClose, apiBase, briefRole }) {
             )}
             <button
               onClick={onClose}
-              className="mt-3 rounded-lg border border-border bg-white px-4 py-1.5 text-xs font-semibold text-tx hover:bg-bg transition-colors"
+              className="mt-4 rounded-lg border border-border bg-white px-5 py-2 text-xs font-semibold text-tx hover:bg-bg transition-colors"
             >
               Lukk
             </button>
           </div>
         ) : (
           /* ── Form ────────────────────────────────────────────────────────── */
-          <form onSubmit={handleSubmit} className="px-5 pb-5 space-y-4">
+          <form onSubmit={handleSubmit} className="px-6 pb-6 pt-4 space-y-4">
 
             {/* Type selector */}
             <div className="flex gap-2">
@@ -132,35 +133,52 @@ export default function FeedbackModal({ onClose, apiBase, briefRole }) {
                   type="button"
                   onClick={() => { setType(t.key); textareaRef.current?.focus() }}
                   className={[
-                    'flex-1 flex flex-col items-center gap-1 rounded-xl border py-2.5 px-1 text-center transition-all',
+                    'flex-1 flex flex-col items-center gap-1.5 rounded-xl border py-3 px-2 text-center transition-all',
                     type === t.key
                       ? 'border-accent/60 bg-accent/8 text-primary shadow-sm'
                       : 'border-border bg-bg/40 text-tx-muted hover:border-border/80 hover:bg-bg',
                   ].join(' ')}
                 >
-                  <span className="text-lg leading-none">{t.emoji}</span>
-                  <span className="text-[10px] font-semibold leading-tight">{t.label}</span>
+                  <span className="text-xl leading-none">{t.emoji}</span>
+                  <span className="text-[11px] font-semibold leading-tight">{t.label}</span>
                 </button>
               ))}
             </div>
 
+            {/* Subject */}
+            <div>
+              <label className="block text-[10px] font-semibold uppercase tracking-widest text-tx-muted mb-1.5">
+                Gjelder
+              </label>
+              <input
+                type="text"
+                value={subject}
+                onChange={e => setSubject(e.target.value)}
+                placeholder="Hvilken funksjon eller del av produktet?"
+                className="w-full rounded-xl border border-border bg-bg/60 px-3.5 py-2.5
+                  text-sm text-primary placeholder:text-tx-muted/60
+                  focus:outline-none focus:ring-1 focus:ring-accent/40 focus:border-accent/50 transition-colors"
+              />
+            </div>
+
             {/* Message */}
             <div>
+              <label className="block text-[10px] font-semibold uppercase tracking-widest text-tx-muted mb-1.5">
+                Melding
+              </label>
               <textarea
                 ref={textareaRef}
                 value={message}
                 onChange={e => setMessage(e.target.value)}
                 onKeyDown={handleTextareaKey}
                 placeholder={PLACEHOLDERS[type]}
-                rows={4}
+                rows={5}
                 className="w-full resize-none rounded-xl border border-border bg-bg/60 px-3.5 py-2.5
                   text-sm text-primary placeholder:text-tx-muted/60
                   focus:outline-none focus:ring-1 focus:ring-accent/40 focus:border-accent/50
                   transition-colors"
               />
-              <p className="mt-1 text-right text-[10px] text-tx-muted/50">
-                ⌘ + Enter for å sende
-              </p>
+              <p className="mt-1 text-right text-[10px] text-tx-muted/50">⌘ + Enter for å sende</p>
             </div>
 
             {/* Optional name */}
@@ -170,35 +188,35 @@ export default function FeedbackModal({ onClose, apiBase, briefRole }) {
                 value={name}
                 onChange={e => setName(e.target.value)}
                 placeholder="Navn (valgfri)"
-                className="w-full rounded-xl border border-border bg-bg/60 px-3.5 py-2
+                className="w-full rounded-xl border border-border bg-bg/60 px-3.5 py-2.5
                   text-sm text-primary placeholder:text-tx-muted/60
                   focus:outline-none focus:ring-1 focus:ring-accent/40 focus:border-accent/50 transition-colors"
               />
             ) : (
               <button
                 type="button"
-                onClick={() => { setShowName(true); }}
+                onClick={() => setShowName(true)}
                 className="text-[11px] text-tx-muted/70 hover:text-tx-muted transition-colors"
               >
                 + Legg til navn
               </button>
             )}
 
-            {/* Submit */}
+            {/* Submit row */}
             <div className="flex items-center justify-between pt-1">
-              {status === 'error' && (
+              {status === 'error' ? (
                 <p className="text-[11px] text-red-400">Noe gikk galt — prøv igjen</p>
+              ) : (
+                <span />
               )}
-              <div className="ml-auto">
-                <button
-                  type="submit"
-                  disabled={!canSubmit}
-                  className="rounded-lg bg-accent px-4 py-2 text-xs font-semibold text-white
-                    hover:bg-accent/80 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
-                >
-                  {status === 'sending' ? 'Sender…' : 'Send tilbakemelding'}
-                </button>
-              </div>
+              <button
+                type="submit"
+                disabled={!canSubmit}
+                className="rounded-lg bg-accent px-5 py-2 text-sm font-semibold text-white
+                  hover:bg-accent/80 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+              >
+                {status === 'sending' ? 'Sender…' : 'Send produkttilbakemelding'}
+              </button>
             </div>
 
           </form>
