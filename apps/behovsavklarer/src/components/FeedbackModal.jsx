@@ -4,7 +4,7 @@ import { useT } from '../i18n'
 export default function FeedbackModal({ onClose, apiBase, briefRole }) {
   const t = useT()
   const [type,    setType]   = useState('general')
-  const [subject, setSubject]= useState('Behovsavklarer')
+  const [subject, setSubject]= useState(t.feedbackDefaultSubject)
   const [message, setMessage]= useState('')
   const [name,    setName]   = useState('')
   const [status,  setStatus] = useState('idle')

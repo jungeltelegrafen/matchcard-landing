@@ -1,3 +1,5 @@
+import { useT } from '../i18n'
+
 function dotStyle(f) {
   const base = { width: 6, height: 6, borderRadius: '50%', flexShrink: 0, transition: 'background 0.4s' }
   if (f === 0)  return { ...base, background: 'transparent', border: '1.5px solid #D9CFC7' }
@@ -9,9 +11,10 @@ function dotStyle(f) {
 export default function ListField({
   label, items = [], onChange,
   prominent = false, maxWarning,
-  placeholder = 'Legg til krav...',
   suggestion, onAccept, onReject,
 }) {
+  const t = useT()
+
   function add()           { onChange([...items, '']) }
   function remove(i)       { onChange(items.filter((_, idx) => idx !== i)) }
   function update(i, val)  { onChange(items.map((item, idx) => idx === i ? val : item)) }
@@ -41,7 +44,7 @@ export default function ListField({
       </label>
 
       {items.length === 0 && (
-        <p className="text-xs text-tx-muted/70 italic py-1">Ingen krav lagt til ennå</p>
+        <p className="text-xs text-tx-muted/70 italic py-1">{t.listEmpty}</p>
       )}
 
       {items.map((item, i) => (
@@ -75,7 +78,7 @@ export default function ListField({
 
       {maxWarning && items.filter(Boolean).length > maxWarning && (
         <div className="rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-700">
-          Lang kravspek — hva er essensen?
+          {t.listTooLong}
         </div>
       )}
 
@@ -83,20 +86,20 @@ export default function ListField({
         onClick={add}
         className="text-xs font-semibold text-accent hover:text-accent/70 transition-colors"
       >
-        + Legg til
+        {t.listAdd}
       </button>
 
       {suggestion && (
         <div className="mt-2 flex items-start gap-2 rounded-lg border border-accent/20 bg-accent-light p-2 text-xs">
           <span className="flex-1 text-tx leading-relaxed">
-            <span className="font-semibold text-accent">AI:</span>{' '}
+            <span className="font-semibold text-accent">{t.aiLabel}</span>{' '}
             {(Array.isArray(suggestion) ? suggestion : [suggestion]).filter(Boolean).join(' · ')}
           </span>
           <button onClick={onAccept} className="whitespace-nowrap font-semibold text-accent hover:text-accent/70 transition-colors">
-            Bruk
+            {t.bruk}
           </button>
           <button onClick={onReject} className="whitespace-nowrap text-tx hover:text-primary transition-colors">
-            Avvis
+            {t.avvis}
           </button>
         </div>
       )}

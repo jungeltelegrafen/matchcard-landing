@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react'
-import { EMPTY_BRIEF, makeEmptyBrief } from './data'
+import { EMPTY_BRIEF, makeEmptyBrief, TILBUDSFORMAT_NO, TILBUDSFORMAT_EN } from './data'
 import { parseFile } from './lib/parseFile'
 import { LanguageProvider, useT, useLang } from './i18n'
 import SourcePanel from './components/SourcePanel'
@@ -139,7 +139,7 @@ function AppInner() {
     const res = await fetch(`${API_BASE}/api/req/enrich`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query }),
+      body: JSON.stringify({ query, lang }),
     })
     if (!res.ok) throw new Error('Berikning feilet')
     const { summary } = await res.json()
@@ -180,6 +180,16 @@ function AppInner() {
       const next = { ...s }; delete next[key]
       return Object.keys(next).length ? next : null
     })
+  }
+
+  function handleToggle() {
+    const nextLang = lang === 'no' ? 'en' : 'no'
+    setBrief(b => {
+      if (b.tilbudsformat === TILBUDSFORMAT_NO && nextLang === 'en') return { ...b, tilbudsformat: TILBUDSFORMAT_EN }
+      if (b.tilbudsformat === TILBUDSFORMAT_EN && nextLang === 'no') return { ...b, tilbudsformat: TILBUDSFORMAT_NO }
+      return b
+    })
+    toggle()
   }
 
   function handleClear() {
@@ -234,13 +244,13 @@ function AppInner() {
           {/* Language toggle */}
           <div className="flex rounded-lg border border-border overflow-hidden text-[11px] font-bold">
             <button
-              onClick={() => lang !== 'no' && toggle()}
+              onClick={() => lang !== 'no' && handleToggle()}
               className={`px-2.5 py-1.5 transition-colors ${lang === 'no' ? 'bg-primary text-white' : 'text-tx-muted hover:text-tx bg-white'}`}
             >
               NO
             </button>
             <button
-              onClick={() => lang !== 'en' && toggle()}
+              onClick={() => lang !== 'en' && handleToggle()}
               className={`px-2.5 py-1.5 transition-colors ${lang === 'en' ? 'bg-primary text-white' : 'text-tx-muted hover:text-tx bg-white'}`}
             >
               EN
