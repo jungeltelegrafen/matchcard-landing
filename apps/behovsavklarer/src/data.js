@@ -38,7 +38,7 @@ export const EMPTY_BRIEF = {
 }
 
 export const TILBUDSFORMAT_NO = 'E-postformat med praktisk info + spisset CV, evt. med kompetanseskjema'
-export const TILBUDSFORMAT_EN = 'Email format with practical info + tailored CV, optionally with competency form'
+export const TILBUDSFORMAT_EN = 'Email format with practical info + tailored CV, optionally with competence table'
 
 export function makeEmptyBrief() {
   const lang = localStorage.getItem('lang') || 'no'

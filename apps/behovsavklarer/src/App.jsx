@@ -242,17 +242,25 @@ function AppInner() {
           )}
 
           {/* Language toggle */}
-          <div className="flex rounded-lg border border-border overflow-hidden">
+          <div className="flex gap-1">
             <button
               onClick={() => lang !== 'no' && handleToggle()}
-              className={`px-2 py-1 text-base transition-colors ${lang === 'no' ? 'bg-primary/10' : 'opacity-40 hover:opacity-70 bg-white'}`}
+              className={`rounded-lg px-2 py-1 text-base transition-all ${
+                lang === 'no'
+                  ? 'bg-accent/15 ring-1 ring-accent/40 shadow-sm'
+                  : 'bg-white border border-border hover:bg-bg'
+              }`}
               title="Norsk"
             >
               🇳🇴
             </button>
             <button
               onClick={() => lang !== 'en' && handleToggle()}
-              className={`px-2 py-1 text-base transition-colors ${lang === 'en' ? 'bg-primary/10' : 'opacity-40 hover:opacity-70 bg-white'}`}
+              className={`rounded-lg px-2 py-1 text-base transition-all ${
+                lang === 'en'
+                  ? 'bg-accent/15 ring-1 ring-accent/40 shadow-sm'
+                  : 'bg-white border border-border hover:bg-bg'
+              }`}
               title="English"
             >
               🇬🇧
@@ -262,7 +270,7 @@ function AppInner() {
           <button
             onClick={() => setFeedbackOpen(true)}
             className="rounded-lg border border-border bg-white hover:bg-bg
-              px-3 py-1.5 text-xs font-semibold text-tx-muted hover:text-tx transition-colors"
+              px-3 py-1.5 text-xs font-semibold text-tx hover:text-primary transition-colors"
           >
             💬 {t.feedbackBtn}
           </button>
